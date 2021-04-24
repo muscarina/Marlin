@@ -2505,7 +2505,7 @@
    */
   //#define HYBRID_THRESHOLD
 
-#if ENABLED(HYBRID_THRESHOLD)
+
     #define X_HYBRID_THRESHOLD     100  // [mm/s]
     #define X2_HYBRID_THRESHOLD    100
     #define Y_HYBRID_THRESHOLD     100
@@ -2522,7 +2522,7 @@
     #define E5_HYBRID_THRESHOLD     30
     #define E6_HYBRID_THRESHOLD     30
     #define E7_HYBRID_THRESHOLD     30
-  #endif
+
 
   /**
    * Use StallGuard to home / probe X, Y, Z.
