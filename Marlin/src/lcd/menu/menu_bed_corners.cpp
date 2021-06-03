@@ -63,31 +63,52 @@ static inline void _lcd_goto_next_corner() {
 
   ++bed_loop;
 
-  if (bed_loop % 2 == 0) //Level diagonally
-    {
-      if(bed_corner == 3) 
-        bed_corner = 1; //Jump to 2nd corner
-      else 
-        ++bed_corner; //Jump one extra corner
-    }
-
-
-  if(bed_loop == 2) //reset bed loop index
-    bed_loop = 0;
-
-  switch (bed_corner) {
-    case 0: current_position   = lf;   break; // 1st corner
-    case 1: current_position.x = rb.x; break; // 2nd croner
-    case 2: current_position.y = rb.y; break; // 3rd corner
-    case 3: current_position.x = lf.x; break; // 4th corner
+    if( bed_corner == 0){
+        if (bed_loop % 2 == 0){  //If it's time to move diagonally
+          current_position   = lf; // 1st corner
+          current_position.x = rb.x; // 2nd corner
+          bed_corner = 1;
+        }
+        else //Move regularly
+          current_position   = lf;// 1st corner
+      }
+    else if(bed_corner == 1){
+        if (bed_loop % 2 == 0){ //If it's time to move diagonally
+          current_position.x = rb.x;// 2nd corner
+          current_position.y = rb.y;// 3rd corner
+          bed_corner = 2;
+        }
+        else //Move regularly
+          current_position.x = rb.x;// 2nd corner      
+      }
+    else if(bed_corner == 2){
+        if (bed_loop % 2 == 0){  //If it's time to move diagonally
+          current_position.y = rb.y;// 3rd corner
+          current_position.x = lf.x;// 4th corner
+          bed_corner = 3;
+        }
+        else //Move regularly
+          current_position.y = rb.y;// 3rd corner     
+      }
+    else if(bed_corner == 3){
+        if (bed_loop % 2 == 0){  //If it's time to move diagonally
+          current_position.x = lf.x;// 4th corner
+          current_position   = lf;// 1st corner
+          bed_corner = 0;
+        }
+        else //Move regularly
+          current_position.x = lf.x;// 4th corner
+      }
 
 
     #if ENABLED(LEVEL_CENTER_TOO)
-      case 4: current_position.set(X_CENTER, Y_CENTER); break;
+      if(bed_corner == 4)
+        current_position.set(X_CENTER, Y_CENTER);// Center
     #endif
-  }
-
   
+
+  if(bed_loop == 2) //reset bed loop index
+    bed_loop = 0;
 
   line_to_current_position(manual_feedrate_mm_s.x);
   line_to_z(LEVEL_CORNERS_HEIGHT);
